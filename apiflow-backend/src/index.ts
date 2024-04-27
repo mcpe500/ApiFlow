@@ -1,18 +1,10 @@
-import express, { Express, Request, Response } from "express";
 import { PORT } from "./config/ConnectionRelated";
-import cookieParser from "cookie-parser";
+import app from "./app";
+import { registerRouter } from "../utility/router";
 
-const app: Express = express();
-
-// Parse URL-encoded bodies
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-
-app.get("/", (req: Request, res: Response) => {
-    return res.send("Hello World");
-});
-
-app.listen(PORT, () => {
-    console.log("Server running on port 3000");
-});
+(async () => {
+    await registerRouter(app);
+    app.listen(PORT, () => {
+        console.log("Server running on port 3000");
+    });
+})();
