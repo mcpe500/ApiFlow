@@ -1,10 +1,15 @@
+import "dotenv/config";
 import { PORT } from "./config/ConnectionRelated";
 import app from "./app";
-import { registerRouter } from "../utility/router";
+import autoRoutes from "express-automatic-routes";
 
 (async () => {
-    await registerRouter(app);
+    autoRoutes(app, {
+        dir: "./router",
+        log: true,
+    });
+
     app.listen(PORT, () => {
-        console.log("Server running on port 3000");
+        console.log(`Server running on port ${PORT}`);
     });
 })();

@@ -1,10 +1,10 @@
-import express from "express";
+import { Application, Request, Response, NextFunction } from "express";
+import { Resource } from "express-automatic-routes";
 
-const router = express.Router();
-
-router.get("/", (req, res) => {
-    console.log(req);
-    res.send("Hello world!");
-});
-
-export default router;
+export default (express: Application) => {
+    return <Resource>{
+        get: (req: Request, res: Response) => {
+            return res.status(200).send("Hello, World!");
+        },
+    };
+};
