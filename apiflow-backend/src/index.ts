@@ -1,7 +1,9 @@
 import "dotenv/config";
-import { PORT } from "./config/ConnectionRelated";
+import { app as appConnection } from "./config";
 import app from "./app";
 import autoRoutes from "express-automatic-routes";
+import { startDatabase } from "./database";
+import { log } from "../utility/logging";
 
 (async () => {
     autoRoutes(app, {
@@ -9,7 +11,9 @@ import autoRoutes from "express-automatic-routes";
         log: true,
     });
 
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
+    await startDatabase();
+
+    app.listen(appConnection.port, () => {
+        log(`Server running on port ${appConnection.port}`, "APP");
     });
 })();
