@@ -4,20 +4,36 @@ import { ApiError } from "../../types";
 import { error as errorLog } from "../../../utility/logging";
 import jwt from "jsonwebtoken";
 import { node } from "../../config";
+import { loginSchema } from "../../validation/user";
+import { ZodError } from "zod";
 
 export const login = async (req: Request, res: Response) => {
-    const {
-        email,
-        password: passwordData,
-        refreshToken,
-    }: { email: string; password: string; refreshToken: boolean } = req.body;
+    let email = "",
+        passwordData = "",
+        rememberMe = false;
 
-    // TODO Make call to mongo database to check if user exist.
+    try {
+        const result = loginSchema.parse(req.body);
+        email = result.email;
+        passwordData = result.password;
+        rememberMe = result.rememberMe;
+    } catch (error) {
+        if (error instanceof ZodError) {
+            errorLog(error, "validation");
+            // @ts-ignore
+            return res.status(400).json({
+                message:
+                    error.flatten().fieldErrors.rememberMe?.[0] ??
+                    "Validation error",
+            });
+        }
+    }
+
     let user;
     try {
         user = (await loginUser(email, passwordData)).user;
     } catch (error) {
-        errorLog(error, "APP");
+        errorLog(error, "api");
         if (error instanceof ApiError) {
             return res
                 .status(error.statusCode)
