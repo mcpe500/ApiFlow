@@ -1,4 +1,5 @@
 import "dotenv/config";
+
 interface MongoConnection {
     name: string | undefined;
     host: string | undefined;
@@ -10,6 +11,7 @@ interface AppConnection {
 }
 
 interface NodeConfig {
+    accessTokenSecret: string | undefined;
     environment: string | undefined;
 }
 
@@ -25,4 +27,5 @@ export const app: AppConnection = {
 
 export const node: NodeConfig = {
     environment: process.env.NODE_ENVIRONMENT,
+    accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
 };
