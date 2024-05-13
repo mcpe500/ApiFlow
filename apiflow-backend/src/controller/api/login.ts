@@ -2,10 +2,10 @@ import { Request, Response } from "express";
 import { loginUser } from "../../service/User";
 import { ApiError } from "../../types";
 import { error as errorLog } from "../../../utility/logging";
-import jwt from "jsonwebtoken";
-import { node } from "../../config";
+import { Token } from "../../../utility/token";
 import { loginSchema } from "../../validation/user";
 import { ZodError } from "zod";
+import { generateToken } from "../../../utility/token";
 
 export const login = async (req: Request, res: Response) => {
     let email = "",
@@ -45,9 +45,11 @@ export const login = async (req: Request, res: Response) => {
 
     const { password, ...userWithoutPassword } = user;
 
-    const accessToken = jwt.sign(userWithoutPassword, node.accessTokenSecret!, {
-        expiresIn: "30m",
-    });
+    const accessToken = generateToken(
+        userWithoutPassword,
+        Token.ACCESS,
+        15 * 60,
+    );
 
     res.cookie("accessToken", accessToken, { httpOnly: true, secure: true });
 
