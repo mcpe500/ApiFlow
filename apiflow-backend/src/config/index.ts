@@ -1,4 +1,5 @@
 import "dotenv/config";
+
 interface MongoConnection {
     name: string | undefined;
     host: string | undefined;

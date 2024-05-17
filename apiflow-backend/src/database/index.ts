@@ -1,10 +1,19 @@
-import { connect, connection } from "mongoose";
+import { connect, connection, set } from "mongoose";
 import { mongo, node } from "../config";
 import { log, error as errorLogging, debug } from "../../utility/logging";
 
-connection.on("connected", () => log("Mongoose connected succesfully to MongoDB", "DB"));
-connection.on("disconnected", () => log("Mongoose has been disconnected from MongoDB", "DB"));
-connection.on("close", () => log("Mongoose connection from MongoDB has been closed", "DB"));
+connection.on("connected", () =>
+    log("Mongoose connected succesfully to MongoDB", "DB"),
+);
+connection.on("disconnected", () =>
+    log("Mongoose has been disconnected from MongoDB", "DB"),
+);
+connection.on("close", () =>
+    log("Mongoose connection from MongoDB has been closed", "DB"),
+);
+set("debug", (collectionName: string, method, query, doc) => {
+    log(`${collectionName}.${method} ${JSON.stringify(query)}`, "DB");
+});
 
 export const startDatabase = async () => {
     try {

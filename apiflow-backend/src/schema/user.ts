@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import { User } from "../type";
+import { User } from "../types";
 export default new Schema<User>({
     name: { type: String, required: true },
     email: { type: String, required: true },
