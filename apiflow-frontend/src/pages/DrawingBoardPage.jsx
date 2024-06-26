@@ -5,11 +5,15 @@ import SideBarDrawingBoardRight from "../components/SideBarDrawingBoardRight";
 
 export default function DrawingBoardPage() {
   return (
-    <>
+    <div className="flex flex-col h-screen">
       <NavBarDrawingBoard />
-      <SideBarDrawingBoardLeft />
-      <SideBarDrawingBoardRight />
-      <DrawingBoard />
-    </>
+      <div className="flex flex-grow">
+        <SideBarDrawingBoardLeft />
+        <div className="flex-grow">
+          <DrawingBoard />
+        </div>
+        <SideBarDrawingBoardRight />
+      </div>
+    </div>
   );
 }
