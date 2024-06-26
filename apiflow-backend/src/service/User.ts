@@ -1,11 +1,14 @@
-import User from "../model/User";
+import UserModel from "../model/User";
+import type { User } from "../types";
 import { ApiError } from "../types";
 import bcrypt from "bcrypt";
 
 export const getUser = async (email: string) => {
-    const user = await User.findOne({ email: email });
+    const user = await UserModel.findOne({ email: email });
     return user;
 };
+
+export const createUser = async (data: User) => {};
 
 export const loginUser = async (email: string, password: string) => {
     const user = await getUser(email);

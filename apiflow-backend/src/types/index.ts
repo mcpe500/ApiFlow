@@ -3,11 +3,17 @@ export interface User {
     username: string;
     email: string;
     password: string;
-    refreshToken: string;
+    refreshToken: string | undefined;
 }
 
 export class ApiError extends Error {
     private _statusCode: number;
+
+    /**
+     * Initialize an ApiError with message and status code
+     * @param {string} message the error message to be given
+     * @param {number} statusCode the error status code.
+     */
     constructor(message: string, statusCode: number) {
         super(message);
         this.name = this.constructor.name;
