@@ -1,6 +1,4 @@
-import { json } from "react-router-dom";
-
-const storeItem = (name, value) => {
+export const storeItem = (name, value) => {
   if (getItem(name)) {
     removeItem(name);
   }
@@ -8,7 +6,7 @@ const storeItem = (name, value) => {
   localStorage.setItem(name, data);
 };
 
-const getItem = (name) => {
+export const getItem = (name) => {
   let item = localStorage.getItem(name);
   if (item == null) {
     return item;
@@ -17,8 +15,6 @@ const getItem = (name) => {
   return data;
 };
 
-const removeItem = (value) => {
+export const removeItem = (value) => {
   localStorage.removeItem(value);
 };
-
-export { storeItem, getItem, removeItem };
