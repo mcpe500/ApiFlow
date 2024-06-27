@@ -2,12 +2,27 @@ import { Request, Response } from "express";
 import { getUser, createUser } from "../service/User";
 import { ApiError } from "../types";
 import { error as errorLog } from "../../utility/logging";
-import { Token } from "../../utility/token";
+import { Token, TokenStatus } from "../types";
 import { loginSchema, registerSchema } from "../validation/user";
-import { generateToken } from "../../utility/token";
+import { generateToken, verifyToken } from "../../utility/token";
 import bcrypt from "bcrypt";
 
 export const login = async (req: Request, res: Response) => {
+    // Handle if already logged in (Access Token exist and not expired)
+
+    // First find out if the access token already exist.
+    const oldAccessToken = req.cookies.accessToken;
+    if (oldAccessToken) {
+        // Then we verify that its not expired.
+        const { status, data } = verifyToken(oldAccessToken, Token.ACCESS);
+
+        // If the access token is not expired, mean the user is still logged in and somehow logged in again.
+        if (status === TokenStatus.VERIFIED) {
+            return res.status(403).json({ message: "Already logged in!" });
+        }
+        // If the access token is expired, then the user is logged out (thus need to login again)
+    }
+
     const { success, data, error } = loginSchema.safeParse(req.body);
 
     if (!success) {
@@ -36,6 +51,19 @@ export const login = async (req: Request, res: Response) => {
             15 * 60,
         );
 
+        if (rememberMe) {
+            // If remembeMe is checked then create an refresh token
+            const refreshToken = generateToken(
+                userWithoutPassword,
+                Token.REFRESH,
+                /// 999 year
+                // 999 years * 12 months * 30 days * 24 hours * 60 minutes * 60 seconds
+                999 * 12 * 30 * 24 * 60 * 60,
+            );
+            user.refreshToken = refreshToken;
+            await user.save();
+        }
+
         // Append the token to cookie.
         res.cookie("accessToken", accessToken, {
             httpOnly: true,
@@ -62,8 +90,6 @@ export const register = async (req: Request, res: Response) => {
         errorLog(error, "validation");
         return res.status(400).json({ message: error.message });
     }
-
-    const { email, password, name, username } = data;
 
     try {
         // If registration failed it will throw an error (hopefully)

@@ -1,3 +1,4 @@
+import { JwtPayload } from "jsonwebtoken";
 export interface User {
     name: string;
     username: string;
@@ -27,4 +28,19 @@ export class ApiError extends Error {
     public set statusCode(statusCode: number) {
         this._statusCode = statusCode;
     }
+}
+
+export interface VerificationStatus {
+    status: TokenStatus;
+    data: JwtPayload;
+}
+
+export enum Token {
+    ACCESS,
+    REFRESH,
+}
+
+export enum TokenStatus {
+    EXPIRED,
+    VERIFIED,
 }
