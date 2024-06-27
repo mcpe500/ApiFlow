@@ -1,42 +1,42 @@
 {
-  "name": "apiflow-backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "axios": "^1.6.8",
-    "bcrypt": "^5.1.1",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "express-automatic-routes": "^1.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.5.0",
-    "mongoose": "^8.3.3",
-    "picocolors": "^1.0.0",
-    "zod": "^3.23.6"
-  },
-  "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
-    "@types/cookie-parser": "^1.4.7",
-    "@types/express": "^4.17.21",
-    "@types/jest": "^29.5.12",
-    "@types/jsonwebtoken": "^9.0.6",
-    "@types/mongodb": "^4.0.7",
-    "@types/mongoose": "^5.11.97",
-    "@types/node": "^20.12.7",
-    "jest": "^29.7.0",
-    "nodemon": "^3.1.0",
-    "prettier": "^3.2.5",
-    "ts-jest": "^29.1.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
-  }
+    "name": "apiflow-backend",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "npx jest --config ./jest.config.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^1.6.8",
+        "bcrypt": "^5.1.1",
+        "cookie-parser": "^1.4.6",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.5",
+        "express": "^4.19.2",
+        "express-automatic-routes": "^1.1.0",
+        "jsonwebtoken": "^9.0.2",
+        "mongodb": "^6.5.0",
+        "mongoose": "^8.3.3",
+        "picocolors": "^1.0.0",
+        "zod": "^3.23.6"
+    },
+    "devDependencies": {
+        "@types/bcrypt": "^5.0.2",
+        "@types/cookie-parser": "^1.4.7",
+        "@types/express": "^4.17.21",
+        "@types/jest": "^29.5.12",
+        "@types/jsonwebtoken": "^9.0.6",
+        "@types/mongodb": "^4.0.7",
+        "@types/mongoose": "^5.11.97",
+        "@types/node": "^20.12.7",
+        "jest": "^29.7.0",
+        "nodemon": "^3.1.0",
+        "prettier": "^3.2.5",
+        "ts-jest": "^29.1.5",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.4.5"
+    }
 }

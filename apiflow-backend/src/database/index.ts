@@ -1,14 +1,15 @@
-import { connect, connection, set } from "mongoose";
+import mongoose from "mongoose";
+import { connect, set } from "mongoose";
 import { mongo, node } from "../config";
 import { log, error as errorLogging, debug } from "../../utility/logging";
 
-connection.on("connected", () =>
+mongoose.connection.on("connected", () =>
     log("Mongoose connected succesfully to MongoDB", "DB"),
 );
-connection.on("disconnected", () =>
+mongoose.connection.on("disconnected", () =>
     log("Mongoose has been disconnected from MongoDB", "DB"),
 );
-connection.on("close", () =>
+mongoose.connection.on("close", () =>
     log("Mongoose connection from MongoDB has been closed", "DB"),
 );
 set("debug", (collectionName: string, method, query, doc) => {
