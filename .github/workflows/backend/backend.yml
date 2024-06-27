@@ -1,0 +1,32 @@
+name: ApiFlow Backend CI
+
+on:
+  push:
+    paths:
+      - "apiflow-backend/**"
+  pull_request:
+    paths:
+      - "apiflow-backend/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "latest"
+
+      - name: Install dependencies
+        run: |
+          cd apiflow-backend
+          npm install
+
+      - name: Run Tests
+        run: |
+          cd apiflow-backend
+          npm run test
