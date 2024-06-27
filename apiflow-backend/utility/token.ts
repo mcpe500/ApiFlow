@@ -7,22 +7,36 @@ import { Token, TokenStatus, VerificationStatus } from "../src/types";
  * @param {any} payload the data that will be encrypted
  * @param {Token} type the type of the token that will be generated
  * @param {number} expiresIn the expiration time in seconds
+ * @param {string} tokenSecret is optional and used to define the secret key.
  * @returns {string} the token that is generated
  */
 export const generateToken = (
     payload: any,
     type: Token,
     expiresIn: number,
+    tokenSecret?: string,
 ): string => {
-    const secret: string = process.env[`${Token[type]}_TOKEN_SECRET`]!;
+    const secret: string =
+        tokenSecret ?? process.env[`${Token[type]}_TOKEN_SECRET`]!;
     const token = jwt.sign(payload, secret, {
         expiresIn: expiresIn,
     });
     return token;
 };
 
-export const verifyToken = (token: string, type: Token): VerificationStatus => {
-    const secret: string = process.env[`${Token[type]}_TOKEN_SECRET`]!;
+/**
+ * Verify a given token string.
+ * @param {string} token the token string.
+ * @param {Token} type the type of the token that will be used to validate this token string
+ * @param {string} tokenSecret is optional and used to defin the secret key.
+ */
+export const verifyToken = (
+    token: string,
+    type: Token,
+    tokenSecret?: string,
+): VerificationStatus => {
+    const secret: string =
+        tokenSecret ?? process.env[`${Token[type]}_TOKEN_SECRET`]!;
     const result: jwt.JwtPayload = jwt.verify(token, secret, {
         ignoreExpiration: true,
     }) as jwt.JwtPayload;
@@ -33,7 +47,6 @@ export const verifyToken = (token: string, type: Token): VerificationStatus => {
         result.exp && currentDate > result.exp
             ? TokenStatus.EXPIRED
             : TokenStatus.VERIFIED;
-    console.log(status);
     return {
         status: status,
         data: result,

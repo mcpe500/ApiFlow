@@ -132,7 +132,14 @@ describe("Token generation test", () => {
                 name: "bambang",
             };
 
-            const token = generateToken(payload, Token.ACCESS, 1 * 60);
+            const secretKey = "verysecretindeed";
+
+            const token = generateToken(
+                payload,
+                Token.ACCESS,
+                1 * 60,
+                secretKey,
+            );
             expect(token).toBeTruthy();
         });
 
@@ -142,10 +149,17 @@ describe("Token generation test", () => {
                 name: "bambang",
             };
 
-            const token = generateToken(payload, Token.ACCESS, 1 * 60);
+            const secretKey = "verysecretindeed";
+
+            const token = generateToken(
+                payload,
+                Token.ACCESS,
+                1 * 60,
+                secretKey,
+            );
             // 61 seconds (miliseconds)
             jest.advanceTimersByTime(61 * 1000);
-            const decoded = verifyToken(token, Token.ACCESS);
+            const decoded = verifyToken(token, Token.ACCESS, secretKey);
 
             expect(decoded.status).toBe(TokenStatus.EXPIRED);
         });
