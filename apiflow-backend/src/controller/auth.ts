@@ -3,7 +3,7 @@ import { getUser, createUser } from "../service/User";
 import { ApiError } from "../types";
 import { error as errorLog } from "../../utility/logging";
 import { Token } from "../../utility/token";
-import { loginSchema } from "../validation/user";
+import { loginSchema, registerSchema } from "../validation/user";
 import { generateToken } from "../../utility/token";
 import bcrypt from "bcrypt";
 
@@ -52,5 +52,37 @@ export const login = async (req: Request, res: Response) => {
         } else {
             return res.status(500).json({ message: "Internal server error" });
         }
+    }
+};
+
+export const register = async (req: Request, res: Response) => {
+    const { success, data, error } = registerSchema.safeParse(req.body);
+
+    if (!success) {
+        errorLog(error, "validation");
+        return res.status(400).json({ message: error.message });
+    }
+
+    const { email, password, name, username } = data;
+
+    try {
+        // If registration failed it will throw an error (hopefully)
+        // Refresh token set to undefined because this is a registration process, and i used the User type for the createUser :)
+        const createdUser = await createUser({
+            ...data,
+            refreshToken: undefined,
+        });
+
+        return res
+            .status(201)
+            .json({ message: "Registration succesful!", data: createdUser });
+    } catch (error) {
+        if (error instanceof ApiError) {
+            return res
+                .status(error.statusCode)
+                .json({ message: error.message });
+        }
+
+        return res.status(500).json({ message: "Internal server error" });
     }
 };

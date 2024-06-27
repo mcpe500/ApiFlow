@@ -8,7 +8,10 @@ export const getUser = async (email: string) => {
     return user;
 };
 
-export const createUser = async (data: User) => {};
+export const createUser = async (data: User) => {
+    const createdUser = await UserModel.create(data);
+    return cratedUser;
+};
 
 export const loginUser = async (email: string, password: string) => {
     const user = await getUser(email);
