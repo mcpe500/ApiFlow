@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import luxon from "luxon";
+import { DateTime } from "luxon";
 import { Token, TokenStatus, VerificationStatus } from "../src/types";
 
 /**
@@ -23,19 +23,17 @@ export const generateToken = (
 
 export const verifyToken = (token: string, type: Token): VerificationStatus => {
     const secret: string = process.env[`${Token[type]}_TOKEN_SECRET`]!;
-
     const result: jwt.JwtPayload = jwt.verify(token, secret, {
         ignoreExpiration: true,
     }) as jwt.JwtPayload;
 
-    const currentDate = luxon.DateTime.now().toSeconds();
+    const currentDate = DateTime.now().toSeconds();
     // If current date is greater than the token's expiration date meaning that the token must be expired.
-    console.log(currentDate);
-    console.log(result);
     const status: TokenStatus =
         result.exp && currentDate > result.exp
             ? TokenStatus.EXPIRED
             : TokenStatus.VERIFIED;
+    console.log(status);
     return {
         status: status,
         data: result,

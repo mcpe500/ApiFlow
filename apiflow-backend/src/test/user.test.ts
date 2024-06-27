@@ -3,7 +3,9 @@ import { getUser } from "../service/User";
 import UserModel from "../model/User";
 import mongoose from "mongoose";
 import { loginSchema, registerSchema } from "../validation/user";
-import { Token, generateToken } from "../../utility/token";
+import { generateToken, verifyToken } from "../../utility/token";
+import { Token, TokenStatus } from "../types";
+import jwt from "jsonwebtoken";
 
 jest.mock("../model/User");
 
@@ -116,6 +118,14 @@ describe("User service test", () => {
 
 describe("Token generation test", () => {
     describe("Access Token Test", () => {
+        beforeEach(() => {
+            jest.useFakeTimers();
+        });
+
+        afterEach(() => {
+            jest.useRealTimers();
+        });
+
         it("Should generate an access token", () => {
             const payload = {
                 username: "bambang",
@@ -124,6 +134,20 @@ describe("Token generation test", () => {
 
             const token = generateToken(payload, Token.ACCESS, 1 * 60);
             expect(token).toBeTruthy();
+        });
+
+        it("Should generate an access token that will be expired in 1 minutes", () => {
+            const payload = {
+                username: "bambang",
+                name: "bambang",
+            };
+
+            const token = generateToken(payload, Token.ACCESS, 1 * 60);
+            // 61 seconds (miliseconds)
+            jest.advanceTimersByTime(61 * 1000);
+            const decoded = verifyToken(token, Token.ACCESS);
+
+            expect(decoded.status).toBe(TokenStatus.EXPIRED);
         });
     });
 });
