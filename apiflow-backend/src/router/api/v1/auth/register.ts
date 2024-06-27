@@ -1,10 +1,9 @@
-import { Application, Request, Response, NextFunction } from "express";
+import { Application } from "express";
 import { Resource } from "express-automatic-routes";
+import { register } from "../../../../controller/auth";
 
 export default (express: Application) => {
     return <Resource>{
-        post: (req: Request, res: Response) => {
-            return res.status(200).send("Posting on /api/auth/register");
-        },
+        post: register,
     };
 };
