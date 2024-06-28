@@ -5,5 +5,5 @@ export default new Schema<User>({
     email: { type: String, required: true },
     password: { type: String, required: true },
     username: { type: String, required: true },
-    refreshToken: { type: String, required: true },
+    refreshToken: { type: String, required: false },
 });

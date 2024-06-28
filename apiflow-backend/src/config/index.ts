@@ -25,5 +25,5 @@ export const app: AppConnection = {
 };
 
 export const node: NodeConfig = {
-    environment: process.env.NODE_ENVIRONMENT,
+    environment: process.env.NODE_ENV,
 };
